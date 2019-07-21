@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/kielkow/a_njs_h_pf/issues"
   },
-  "homepage": "https://github.com/kielkow/a_njs_h_pf#readme"
+  "homepage": "https://github.com/kielkow/a_njs_h_pf#readme",
+  "dependencies": {
+    "consign": "^0.1.6",
+    "express": "^4.17.1"
+  }
 }
