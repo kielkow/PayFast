@@ -1,0 +1,24 @@
+{
+  "name": "a_njs_h_pf",
+  "version": "1.0.0",
+  "description": "um gateway para pagamentos atraves de recursos http",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kielkow/a_njs_h_pf.git"
+  },
+  "keywords": [
+    "gateway",
+    "pagamentos",
+    "api"
+  ],
+  "author": "kielkow",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kielkow/a_njs_h_pf/issues"
+  },
+  "homepage": "https://github.com/kielkow/a_njs_h_pf#readme"
+}
