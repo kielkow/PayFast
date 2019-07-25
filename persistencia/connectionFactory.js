@@ -1,14 +1,14 @@
-const mysql = require('mysql')
+var mysql = require('mysql');
 
-function createDBConnection(){
+function createDBConnection() {
     return mysql.createConnection({
         host: 'localhost',
         user: 'root',
         password: '',
         database: 'payfast'
-    })
+    });
 }
 
-module.exports = () => {
-    return createDBConnection
+module.exports = function () {
+    return createDBConnection;
 }

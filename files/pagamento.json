@@ -1,7 +1,6 @@
 {
     "forma_de_pagamento": "payfast",
-    "valor": 100,
+    "valor": 10.87,
     "moeda": "BRL",
     "descricao": "criando um pagamento"
-
 }
