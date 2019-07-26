@@ -10,6 +10,52 @@ module.exports = (app) => {
         )
     })
 
+    app.delete('/pagamentos/pagamento/:id', function (req, res) {
+
+        var pagamento = {}
+
+        const id = req.params.id
+
+        pagamento.id = id
+        pagamento.status = 'CANCELADO'
+
+        const connection = app.persistencia.connectionFactory()
+        const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+
+        pagamentoDao.atualiza(pagamento, function (erro) {
+            if (erro) {
+                res.status(500).send(erro)
+                return
+            }
+            console.log('pagamento cancelado')
+            res.send(pagamento)
+        })
+
+    })
+
+    app.put('/pagamentos/pagamento/:id', function (req, res) {
+
+        var pagamento = {}
+
+        const id = req.params.id
+
+        pagamento.id = id
+        pagamento.status = 'CONFIRMADO'
+
+        const connection = app.persistencia.connectionFactory()
+        const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+
+        pagamentoDao.atualiza(pagamento, function (erro) {
+            if (erro) {
+                res.status(500).send(erro)
+                return
+            }
+            console.log('pagamento confirmado')
+            res.status(204).send(pagamento)
+        })
+
+    })
+
     app.post('/pagamentos/pagamento', function (req, res) {
 
         const pagamento = req.body
