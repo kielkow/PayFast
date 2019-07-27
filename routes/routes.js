@@ -87,9 +87,29 @@ module.exports = (app) => {
                 res.status(500).send(erro)
             } else {
                 console.log('Pagamento criado ' + resultado)
-                res.location('pagamentos/pagamento/' + resultado.insertId)
                 pagamento.id = resultado.insertId
-                res.status(201).json(pagamento)
+                res.location('pagamentos/pagamento/' + pagamento.id)
+
+                const response = {
+                    dados_do_pagamento: pagamento,
+                    links: [
+                        {
+                            href: 'http://localhost:3000/pagamentos/pagamento/'
+                                + pagamento.id,
+                            rel: 'confirmar',
+                            method: 'PUT'
+
+                        },
+                        {
+                            href: 'http://localhost:3000/pagamentos/pagamento/'
+                                + pagamento.id,
+                            rel: 'cancelar',
+                            method: 'DELETE'
+                        }
+                    ]
+                }
+
+                res.status(201).json(response)
             }
         })
 
