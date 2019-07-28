@@ -27,7 +27,7 @@ module.exports = (app) => {
                 res.status(500).send(erro)
                 return
             }
-            console.log('pagamento cancelado')
+            console.log('pagamento cancelado!')
             res.send(pagamento)
         })
 
