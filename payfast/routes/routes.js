@@ -55,63 +55,76 @@ module.exports = (app) => {
 
     })
 
-    app.post('/pagamentos/pagamento', function (req, res) {
+    app.post('/pagamentos/pagamento',
+        [
+            check('pagamento.forma_de_pagamento').not().isEmpty().withMessage('Forma de pagamento obrigatória'),
+            check('pagamento.valor').not().isEmpty().withMessage('Valor obrigatório'),
+            check('pagamento.moeda').not().isEmpty().withMessage('Moeda é obrigatória e deve ter 3 caracteres')
+        ],
+        function (req, res) {
 
-        const pagamento = req.body
+            const pagamento = req.body['pagamento']
 
-        check('forma_de_pagamento').isLength({ min: 1 }).withMessage('Forma de pagamento obrigatória')
-        check('valor').isLength({ min: 1 }).isFloat().withMessage('Valor obrigatório')
-        check('moeda').isLength({ min: 3 }).withMessage('Moeda é obrigatória e deve ter 3 caracteres')
+            const erros = validationResult(req)
 
-        const erros = validationResult(req)
-
-        if (erros) {
-            console.log('Erros de validacao encontrados ')
-            res.status(400).send(erros)
-            return
-        }
-
-        console.log('Processando req de pagamento')
-
-        pagamento.status = 'CRIADO'
-        pagamento.data = new Date
-        res.json(pagamento)
-
-        const connection = app.persistencia.connectionFactory()
-        const pagamentoDao = new app.persistencia.PagamentoDao(connection)
-
-        pagamentoDao.salva(pagamento, function (erro, resultado) {
-            if (erro) {
-                console.log(('Erro ao inserir no banco ').concat(erro))
-                res.status(500).send(erro)
-            } else {
-                console.log('Pagamento criado ' + resultado)
-                pagamento.id = resultado.insertId
-                res.location('pagamentos/pagamento/' + pagamento.id)
-
-                const response = {
-                    dados_do_pagamento: pagamento,
-                    links: [
-                        {
-                            href: 'http://localhost:3000/pagamentos/pagamento/'
-                                + pagamento.id,
-                            rel: 'confirmar',
-                            method: 'PUT'
-
-                        },
-                        {
-                            href: 'http://localhost:3000/pagamentos/pagamento/'
-                                + pagamento.id,
-                            rel: 'cancelar',
-                            method: 'DELETE'
-                        }
-                    ]
-                }
-
-                res.status(201).json(response)
+            if (erros) {
+                console.log('Erros de validacao encontrados ')
+                res.status(422).json({ erros: erros.array() });
+                return
             }
-        })
 
-    })
+            console.log('Processando req de pagamento')
+
+            pagamento.status = 'CRIADO'
+            pagamento.data = new Date
+            res.json(pagamento)
+
+            const connection = app.persistencia.connectionFactory()
+            const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+
+            pagamentoDao.salva(pagamento, function (erro, resultado) {
+                if (erro) {
+                    console.log('Erro ao inserir no banco ' + erro)
+                    res.status(500).send(erro)
+                } else {
+                    console.log('Pagamento criado ' + resultado)
+                    pagamento.id = resultado.insertId
+
+                    if (pagamento.forma_de_pagamento == 'cartao') {
+                        const cartao = req.body['cartao']
+                        console.log(cartao)
+
+                        //clinteCartoes.autoriza(cartao)
+
+                        res.status(201).json(cartao)
+                        return
+                    }
+
+                    res.location('pagamentos/pagamento/' + pagamento.id)
+
+                    const response = {
+                        dados_do_pagamento: pagamento,
+                        links: [
+                            {
+                                href: 'http://localhost:3000/pagamentos/pagamento/'
+                                    + pagamento.id,
+                                rel: 'confirmar',
+                                method: 'PUT'
+
+                            },
+                            {
+                                href: 'http://localhost:3000/pagamentos/pagamento/'
+                                    + pagamento.id,
+                                rel: 'cancelar',
+                                method: 'DELETE'
+                            }
+                        ]
+                    }
+
+                    res.status(201).json(response)
+                }
+            })
+
+        })
 
 }
