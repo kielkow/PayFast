@@ -12,6 +12,7 @@ module.exports = () => {
     consign()
         .include('routes')
         .then('persistencia')
+        .then('servicos')
         .into(app)
 
     return app

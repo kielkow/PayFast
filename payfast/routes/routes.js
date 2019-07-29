@@ -94,34 +94,38 @@ module.exports = (app) => {
                         const cartao = req.body['cartao']
                         console.log(cartao)
 
-                        //clinteCartoes.autoriza(cartao)
-
-                        res.status(201).json(cartao)
-                        return
+                        const clinteCartoes = new app.servicos.clinteCartoes()
+                        clienteCartoes.autoriza(cartao, function (exception, request, response, retorno) {
+                            console.log(retorno)
+                            res.status(201).json(retorno)
+                            return
+                        })
                     }
+                    else {
 
-                    res.location('pagamentos/pagamento/' + pagamento.id)
+                        res.location('pagamentos/pagamento/' + pagamento.id)
 
-                    const response = {
-                        dados_do_pagamento: pagamento,
-                        links: [
-                            {
-                                href: 'http://localhost:3000/pagamentos/pagamento/'
-                                    + pagamento.id,
-                                rel: 'confirmar',
-                                method: 'PUT'
+                        const response = {
+                            dados_do_pagamento: pagamento,
+                            links: [
+                                {
+                                    href: 'http://localhost:3000/pagamentos/pagamento/'
+                                        + pagamento.id,
+                                    rel: 'confirmar',
+                                    method: 'PUT'
 
-                            },
-                            {
-                                href: 'http://localhost:3000/pagamentos/pagamento/'
-                                    + pagamento.id,
-                                rel: 'cancelar',
-                                method: 'DELETE'
-                            }
-                        ]
+                                },
+                                {
+                                    href: 'http://localhost:3000/pagamentos/pagamento/'
+                                        + pagamento.id,
+                                    rel: 'cancelar',
+                                    method: 'DELETE'
+                                }
+                            ]
+                        }
+
+                        res.status(201).json(response)
                     }
-
-                    res.status(201).json(response)
                 }
             })
 
