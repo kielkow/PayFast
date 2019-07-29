@@ -2,6 +2,6 @@
     "numero": "1231231231231239",
     "bandeira": "visa",
     "ano_de_expiracao": "2027",
-    "mes_de_expiracao": "june",
+    "mes_de_expiracao": 12,
     "cvv": "123"
 }
