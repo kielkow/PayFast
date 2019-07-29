@@ -10,8 +10,7 @@ module.exports = () => {
     app.use(bodyParser.json())
 
     consign()
-        .include('routes')
-        .then('persistencia')
+        .include('controlers')
         .into(app)
 
     return app
