@@ -107,7 +107,7 @@ module.exports = (app) => {
 
                             res.location('pagamentos/pagamento/' + pagamento.id)
 
-                            const response = {
+                             response = {
                                 dados_do_pagamento: pagamento,
                                 cartao: retorno,
                                 links: [
