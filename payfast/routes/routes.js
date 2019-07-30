@@ -94,10 +94,40 @@ module.exports = (app) => {
                         const cartao = req.body['cartao']
                         console.log(cartao)
 
-                        const clinteCartoes = new app.servicos.clinteCartoes()
+                        const clienteCartoes = new app.servicos.clienteCartoes()
                         clienteCartoes.autoriza(cartao, function (exception, request, response, retorno) {
+
+                            if (exception) {
+                                console.log(exception)
+                                res.status(400).send(exception)
+                                return
+                            }
+
                             console.log(retorno)
-                            res.status(201).json(retorno)
+
+                            res.location('pagamentos/pagamento/' + pagamento.id)
+
+                            const response = {
+                                dados_do_pagamento: pagamento,
+                                cartao: retorno,
+                                links: [
+                                    {
+                                        href: 'http://localhost:3000/pagamentos/pagamento/'
+                                            + pagamento.id,
+                                        rel: 'confirmar',
+                                        method: 'PUT'
+
+                                    },
+                                    {
+                                        href: 'http://localhost:3000/pagamentos/pagamento/'
+                                            + pagamento.id,
+                                        rel: 'cancelar',
+                                        method: 'DELETE'
+                                    }
+                                ]
+                            }
+
+                            res.status(201).json(response)
                             return
                         })
                     }
