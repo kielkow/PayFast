@@ -7,3 +7,5 @@ curl -X POST -v -H "Content-type: application/json"
           "sCepOrigem": "05303030", 
           "sCepDestino":"65066635"
       }'
+
+curl -X POST http://localhost:3000/upload/imagem --data-binary @node.png -H "Content-type: application/octet-stream" -v -H "filename: node.png"
