@@ -68,9 +68,9 @@ module.exports = (app) => {
             const erros = validationResult(req)
 
             if (erros) {
-                console.log('Erros de validacao encontrados ')
-                res.status(422).json({ erros: erros.array() });
-                return
+               console.log('Erros de validacao encontrados ')
+               res.status(422).json({ erros: erros.array() });
+               return
             }
 
             console.log('Processando req de pagamento')
