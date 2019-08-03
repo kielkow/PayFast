@@ -9,6 +9,29 @@ module.exports = (app) => {
         )
     })
 
+    app.get('/pagamentos/pagamento/:id', (req, res) => {
+
+        const id = req.params.id
+        console.log('consultando pagamento ' + id)
+
+        const connection = app.persistencia.connectionFactory()
+        const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+
+        pagamentoDao.buscaPorId(id, (erro, resultado) => {
+
+            if(erro){
+                console.log('Erro na busca por id')
+                res.status(404).send(erro)
+                return
+            }
+
+            console.log('pagamento encontrado ' + JSON.stringify(resultado))
+            res.json(resultado)
+            return
+        })
+
+    })
+
     app.delete('/pagamentos/pagamento/:id', function (req, res) {
 
         var pagamento = {}
@@ -68,9 +91,9 @@ module.exports = (app) => {
             const erros = validationResult(req)
 
             if (erros) {
-               console.log('Erros de validacao encontrados ')
-               res.status(422).json({ erros: erros.array() });
-               return
+                console.log('Erros de validacao encontrados ')
+                res.status(422).json({ erros: erros.array() });
+                return
             }
 
             console.log('Processando req de pagamento')
@@ -107,7 +130,7 @@ module.exports = (app) => {
 
                             res.location('pagamentos/pagamento/' + pagamento.id)
 
-                             response = {
+                            response = {
                                 dados_do_pagamento: pagamento,
                                 cartao: retorno,
                                 links: [
