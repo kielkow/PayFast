@@ -1,7 +1,9 @@
 const fs = require('fs')
 
-fs.createReadStream('node.png')
-    .pipe(fs.createWriteStream('node-stream.png'))
+const file = process.argv[2]
+
+fs.createReadStream(file)
+    .pipe(fs.createWriteStream('new-' + file))
     .on('finish', () => {
         console.log('file writed with stream')
     }) 

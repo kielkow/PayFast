@@ -1,10 +1,12 @@
 const fs = require('fs')
 
-fs.readFile('node.png', (error, buffer) => {
+const file = process.argv[2]
+
+fs.readFile(file, (error, buffer) => {
     console.log('readed file')
 
-    fs.writeFile('nodejs.png', buffer, (err) => {
+    fs.writeFile('new-' + file, buffer, (err) => {
         console.log('writed file')
     })
-    
+
 })
