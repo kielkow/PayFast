@@ -9,3 +9,12 @@ curl -X POST -v -H "Content-type: application/json"
       }'
 
 curl -X POST http://localhost:3000/upload/imagem --data-binary @node.png -H "Content-type: application/octet-stream" -v -H "filename: node.png"
+
+install memcached:
+    wget http://memcached.org/latest
+    tar -zxvf memcached-1.x.x.tar.gz
+    cd memcached-1.x.x
+    ./configure && make && make test && sudo make install
+
+    after install, execute this command:
+    memcached -vv
