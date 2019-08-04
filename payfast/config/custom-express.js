@@ -22,6 +22,7 @@ module.exports = () => {
         .include('routes')
         .then('persistencia')
         .then('servicos')
+        .then('logs')
         .into(app)
 
     return app
