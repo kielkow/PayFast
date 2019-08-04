@@ -1,9 +1,5 @@
 const memcached = require('memcached')
 
-module.exports = () => {
-    return createMemcachedClient()
-}
-
 function createMemcachedClient() {
     const cliente = memcached('localhost:11211', {
         retries: 10,
@@ -12,4 +8,8 @@ function createMemcachedClient() {
     })
 
     return cliente
+}
+
+module.exports = () => {
+    return createMemcachedClient()
 }
