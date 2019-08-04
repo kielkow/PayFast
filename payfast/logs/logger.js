@@ -1,6 +1,11 @@
 const winston = require('winston')
+const fs = require('fs')
 
-const logger = new winston.createLogger({
+if(!fs.existsSync('logs')){
+    fs.mkdirSync('logs')
+}
+
+module.exports = new winston.createLogger({
     transports: [
         new winston.transports.File({
             level: 'info',
@@ -12,5 +17,5 @@ const logger = new winston.createLogger({
     ]
 })
 
-logger.log('info', 'Log com winston')
-logger.info('Log com info()')
+//logger.log('info', 'Log com winston')
+//logger.info('Log com info()')
