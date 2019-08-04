@@ -14,22 +14,35 @@ module.exports = (app) => {
         const id = req.params.id
         console.log('consultando pagamento ' + id)
 
-        const connection = app.persistencia.connectionFactory()
-        const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+        const memcachedClient = app.servicos.memcachedClient()
 
-        pagamentoDao.buscaPorId(id, (erro, resultado) => {
+        memcachedClient.get('pagamento-' + id, (erro, retorno) => {
 
-            if(erro){
-                console.log('Erro na busca por id')
-                res.status(404).send(erro)
+            if (erro || !retorno) {
+                console.log('MISS - chave não encontrada')
+
+                const connection = app.persistencia.connectionFactory()
+                const pagamentoDao = new app.persistencia.PagamentoDao(connection)
+
+                pagamentoDao.buscaPorId(id, (erro, resultado) => {
+
+                    if (erro) {
+                        console.log('Erro na busca por id')
+                        res.status(404).send(erro)
+                        return
+                    }
+
+                    console.log('pagamento encontrado ' + JSON.stringify(resultado))
+                    res.json(resultado)
+                    return
+                })
+            }
+            else {
+                console.log('HIT - valor: ' + JSON.stringify(retorno))
+                res.json(retorno)
                 return
             }
-
-            console.log('pagamento encontrado ' + JSON.stringify(resultado))
-            res.json(resultado)
-            return
         })
-
     })
 
     app.delete('/pagamentos/pagamento/:id', function (req, res) {
@@ -112,6 +125,12 @@ module.exports = (app) => {
                 } else {
                     console.log('Pagamento criado ' + resultado)
                     pagamento.id = resultado.insertId
+
+                    const memcachedClient = app.servicos.memcachedClient()
+
+                    memcachedClient.set('pagamento-' + pagamento.id, pagamento, 60000, (erro) => {
+                        console.log('nova chave adicionada ao cache: pagamento-' + pagamento.id)
+                    })
 
                     if (pagamento.forma_de_pagamento == 'cartao') {
                         const cartao = req.body['cartao']
