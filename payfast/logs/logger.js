@@ -1,7 +1,7 @@
 const winston = require('winston')
 const fs = require('fs')
 
-if(!fs.existsSync('logs')){
+if (!fs.existsSync('logs')) {
     fs.mkdirSync('logs')
 }
 
@@ -11,8 +11,7 @@ module.exports = new winston.createLogger({
             level: 'info',
             filename: 'payfast.log',
             maxsize: 100000,
-            maxFiles: 10,
-
+            maxFiles: 10
         })
     ]
 })

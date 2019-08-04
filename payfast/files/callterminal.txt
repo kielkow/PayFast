@@ -18,3 +18,6 @@ install memcached:
 
     after install, execute this command:
     memcached -vv
+
+Command to see logs in realtime on unix system:
+    tail -f payfast.log
