@@ -1,11 +1,18 @@
 const cluster = require('cluster')
+const os = require('os')
 
-console.log('executando cluster')
+const cpus = os.cpus()
+//console.log(cpus)
 
-if(cluster.isMaster){
-    console.log('is master')
-    cluster.fork()
+if (cluster.isMaster) {
+    console.log('thread master')
+
+    cpus.forEach(() => {
+        cluster.fork()
+    })
 }
-else{
-    console.log('is slave')
+
+else {
+    console.log('thread slave')
+    require('./index')
 }
