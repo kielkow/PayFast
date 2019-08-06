@@ -21,3 +21,6 @@ install memcached:
 
 Command to see logs in realtime on unix system:
     tail -f payfast.log
+
+command to kill a process:
+    kill -9 processnumber
